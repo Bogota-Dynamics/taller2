@@ -56,8 +56,16 @@ class TurtleBotTeleop(Node):
         if (triggerR > -1):
             mov.append("TriggerR")
 
-        if len(mov) > 0:
-            print(mov)
+        msg = Twist()
+        if 'TriggerR' in mov:
+            msg.linear.x = self.linear
+        if 'TriggerL' in mov:
+            msg.linear.x = -self.linear
+        else:
+            msg.linear.x = 0
+
+        print(msg)
+        self.publisher_.publish(msg)
 
 
 def main(args=None):
