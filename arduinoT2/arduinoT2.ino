@@ -6,9 +6,10 @@ int mL2 = 5;
 int pwmR = 6;
 int pwmL = 7;
 
+float x, y;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(250000);
   Serial.setTimeout(1);
 
   pinMode(mR1, OUTPUT);
@@ -20,17 +21,18 @@ void setup() {
 }
 
 void loop() {
-  while (!Serial.available());
 
-    String input = Serial.readStringUntil('\n');
-    float x, y;
-
-    if (sscanf(input.c_str(), "%f,%f", &x, &y) == 2) {
-      Serial.print("x = ");
-      Serial.print(x);
-      Serial.print("y = ");
-      Serial.print(y);
-
+    String input = Serial.readString();
+    input.trim();
+    int commaIndex = input.indexOf(',');
+    if (commaIndex >= 0) {
+       String str1 = input.substring(0, commaIndex);
+       String str2 = input.substring(commaIndex + 1);
+       x = str1.toFloat();
+       y = str1.toFloat();
+       Serial.print(x);
+    }
+   
       if (x > 0) {
         digitalWrite(mL1, HIGH);
         digitalWrite(mL2, LOW);
@@ -40,5 +42,23 @@ void loop() {
         digitalWrite(mR2, LOW);
         digitalWrite(pwmR, 70);
       }
-   }
+
+      else if (x==0){
+        digitalWrite(mL1, LOW);
+        digitalWrite(mL2, LOW);
+
+        digitalWrite(mR1, LOW);
+        digitalWrite(mR2, LOW);
+      }
+
+      else{
+        digitalWrite(mL2, HIGH);
+        digitalWrite(mL1, LOW);
+        digitalWrite(pwmL, 70);
+
+        digitalWrite(mR2, HIGH);
+        digitalWrite(mR1, LOW);
+        digitalWrite(pwmR, 70);
+      }
+ 
 }

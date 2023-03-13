@@ -14,36 +14,33 @@ class TurtleBotInterface(Node):
             Twist,
             'turtlebot_cmdVel',
             self.listener_callback,
-            10)
+            20)
     
+
+        self.arduino = serial.Serial(port='/dev/ttyACM0', baudrate=250000,timeout=.1)
     
 
     def listener_callback(self, msg):
 
-        global arduino
-
         x = msg.linear.x
         y = msg.linear.y
 
-        mensaje = 'x,y'
+        mensaje = f'{x},{y}'
 
-        self.write(mensaje)
+        self.write_read(mensaje)
 
-    
+        
     def write_read(self, x):
-        arduino.write(bytes(x, 'utf-8'))
+
+        self.arduino.write(bytes(x, 'utf-8'))
         time.sleep(0.05)
-        data = arduino.readline()
+        data = self.arduino.readline()
         self.get_logger().info(data)
-
-
-
 
 
 def main(args=None):
     rclpy.init(args=args)
 
-    arduino = serial.Serial(port='COM', baudrate=9600,timeout=.1)
     interface = TurtleBotInterface()
 
     rclpy.spin(interface)

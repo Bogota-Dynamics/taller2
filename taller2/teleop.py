@@ -1,6 +1,6 @@
 import rclpy
 import pynput
-
+import pygame
 from pynput import keyboard
 import time
 from rclpy.node import Node
@@ -13,21 +13,14 @@ class TurtleBotTeleop(Node):
 
     def __init__(self):
         super().__init__('turtle_bot_teleop')
-        self.publisher_ = self.create_publisher(Twist, 'turtlebot_cmdVel', 10)
-        listener = keyboard.Listener(on_press=self.on_presss, on_release=self.on_release)
-        listener.start()
+        self.publisher_ = self.create_publisher(Twist, 'turtlebot_cmdVel', 20)
+        joystick = pygame.joystick.get_count()
+        joystick.init()
+        #listener = keyboard.Listener(on_press=self.on_presss, on_release=self.on_release)
+        #listener.start()
         self.linear = float(input("Ingrese la velocidad lineal: "))
         self.angular = float(input("Ingrese la velocidad angular: "))
-    
-    def save_motion_callback(self, request, response):
-        filename = 'src/taller1/motion/' + request.filename + '.txt'
-        response.path = abspath(filename)
-        self.get_logger().info('Writing to file: ' + response.path)
-
-        with open(response.path, 'w') as f:
-            f.write(self.motion)
-        # retornar el path global del archivo
-        return response
+        self.prevchar = ''
 
     def on_presss(self, key):
 
@@ -63,6 +56,7 @@ class TurtleBotTeleop(Node):
         msg.angular.z=0.0
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing: Stop')
+        self.prevchar = ''
 
 
 def main(args=None):
