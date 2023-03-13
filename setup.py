@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'talker = taller2.teleop:main'
+            'talker = taller2.teleop:main',
+            'listener = taller2.lescucho:main'
         ],
     },
 )
