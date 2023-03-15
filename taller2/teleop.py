@@ -13,7 +13,7 @@ class TurtleBotTeleop(Node):
 
     def __init__(self):
         super().__init__('turtle_bot_teleop')
-        self.publisher_ = self.create_publisher(Twist, 'turtlebot_cmdVel', 20)
+        self.publisher_ = self.create_publisher(Twist, 'turtlebot_cmdVel', 10)
         self.joystick = pygame.joystick.Joystick(0)
         self.joystick.init()
         self.timer = self.create_timer(0.1, self.timer_callback)
@@ -32,6 +32,8 @@ class TurtleBotTeleop(Node):
         self.linear = float(input("Ingrese la velocidad lineal: "))
         self.angular = float(input("Ingrese la velocidad angular: "))
         self.prevchar = ''
+
+        self.msg_viejo = 0
 
     def timer_callback(self):
         for event in pygame.event.get(): 
@@ -59,14 +61,16 @@ class TurtleBotTeleop(Node):
         msg = Twist()
         if 'TriggerR' in mov:
             msg.linear.x = self.linear
-        if 'TriggerL' in mov:
+        elif 'TriggerL' in mov:
             msg.linear.x = -self.linear
         else:
-            msg.linear.x = 0
+            msg.linear.x = 0.0
 
         print(msg)
-        self.publisher_.publish(msg)
+        if (self.msg_viejo!=msg): 
+            self.publisher_.publish(msg)
 
+        self.msg_viejo = msg
 
 def main(args=None):
     rclpy.init(args=args)

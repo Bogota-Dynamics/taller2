@@ -14,10 +14,10 @@ class TurtleBotInterface(Node):
             Twist,
             'turtlebot_cmdVel',
             self.listener_callback,
-            20)
+            10)
     
 
-        self.arduino = serial.Serial(port='/dev/ttyACM0', baudrate=250000,timeout=.1)
+        self.arduino = serial.Serial(port='/dev/ttyACM1', baudrate=250000,timeout=.1)
     
 
     def listener_callback(self, msg):
@@ -31,7 +31,7 @@ class TurtleBotInterface(Node):
 
         
     def write_read(self, x):
-
+        print(f'writing {x}')
         self.arduino.write(bytes(x, 'utf-8'))
         time.sleep(0.05)
         data = self.arduino.readline()
