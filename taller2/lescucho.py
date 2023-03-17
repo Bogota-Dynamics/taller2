@@ -23,7 +23,7 @@ class TurtleBotInterface(Node):
     def listener_callback(self, msg):
 
         x = msg.linear.x
-        y = msg.linear.y
+        y = msg.angular.y
 
         mensaje = f'{x},{y}'
 

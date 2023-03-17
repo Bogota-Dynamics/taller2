@@ -63,6 +63,10 @@ class TurtleBotTeleop(Node):
             msg.linear.x = self.linear
         elif 'TriggerL' in mov:
             msg.linear.x = -self.linear
+        elif 'Izquierda' in mov:
+            msg.angular.y = self.angular
+        elif 'Derecha' in mov:  
+            msg.angular.y = -self.angular
         else:
             msg.linear.x = 0.0
 

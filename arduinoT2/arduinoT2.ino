@@ -31,34 +31,64 @@ void loop() {
        x = str1.toFloat();
        y = str1.toFloat();
        Serial.print(x);
+       Serial.print(y);
     }
    
-      if (x > 0) {
+      if (x < 0) {
         digitalWrite(mL1, HIGH);
         digitalWrite(mL2, LOW);
-        digitalWrite(pwmL, 70);
+        digitalWrite(pwmL, 100);
 
         digitalWrite(mR1, HIGH);
         digitalWrite(mR2, LOW);
-        digitalWrite(pwmR, 70);
+        digitalWrite(pwmR, 100);
       }
 
-      else if (x==0){
-        digitalWrite(mL1, LOW);
-        digitalWrite(mL2, LOW);
 
-        digitalWrite(mR1, LOW);
-        digitalWrite(mR2, LOW);
-      }
-
-      else{
+      else if (x>0){
         digitalWrite(mL2, HIGH);
         digitalWrite(mL1, LOW);
-        digitalWrite(pwmL, 70);
+        digitalWrite(pwmL, 100);
+
+        digitalWrite(mR2, HIGH);
+        digitalWrite(mR1, LOW);
+        digitalWrite(pwmR, 100);
+      }
+
+      else if (y < 0){
+
+        
+        digitalWrite(mL2, HIGH);
+        digitalWrite(mL1, LOW);
+        digitalWrite(pwmL, 100);
+
+        digitalWrite(mR2, LOW);
+        digitalWrite(mR1, HIGH);
+        digitalWrite(pwmR, 70);
+        
+       }
+
+       else if (y > 0){
+
+        
+        digitalWrite(mL2, LOW);
+        digitalWrite(mL1, HIGH);
+        digitalWrite(pwmL, 100);
 
         digitalWrite(mR2, HIGH);
         digitalWrite(mR1, LOW);
         digitalWrite(pwmR, 70);
+        
+       }
+
+       
+
+      else if (x==0 || y==0){
+        digitalWrite(mL1, LOW);
+        digitalWrite(mL2, LOW);
+
+        digitalWrite(mR1, LOW);
+        digitalWrite(mR2, LOW);
       }
  
 }
