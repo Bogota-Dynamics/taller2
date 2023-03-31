@@ -1,19 +1,14 @@
 import rclpy
-import pynput
 import pygame
-from pynput import keyboard
-import time
 from rclpy.node import Node
-from os.path import abspath
-
 from geometry_msgs.msg import Twist
 
 
-class TurtleBotTeleop(Node):
+class robot_bot_teleop(Node):
 
     def __init__(self):
-        super().__init__('turtle_bot_teleop')
-        self.publisher_ = self.create_publisher(Twist, 'turtlebot_cmdVel', 10)
+        super().__init__('robot_bot_teleop')
+        self.publisher_ = self.create_publisher(Twist, 'robot_cmdVel', 10)
         self.joystick = pygame.joystick.Joystick(0)
         self.joystick.init()
         self.timer = self.create_timer(0.1, self.timer_callback)
@@ -80,7 +75,7 @@ def main(args=None):
     rclpy.init(args=args)
     
     pygame.init()
-    teleop = TurtleBotTeleop()
+    teleop = robot_bot_teleop()
 
     rclpy.spin(teleop)
 

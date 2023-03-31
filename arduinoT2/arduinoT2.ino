@@ -29,7 +29,7 @@ void loop() {
        String str1 = input.substring(0, commaIndex);
        String str2 = input.substring(commaIndex + 1);
        x = str1.toFloat();
-       y = str1.toFloat();
+       y = str2.toFloat();
        Serial.print(x);
        Serial.print(y);
     }

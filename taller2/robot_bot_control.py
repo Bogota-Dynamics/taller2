@@ -4,15 +4,13 @@ import time
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
-class TurtleBotInterface(Node):
+class robot_bot_control(Node):
 
     def __init__(self):
-
-        #Inicializar el subscriber
-        super().__init__('controlar')
+        super().__init__('robot_bot_control')
         self.subscription = self.create_subscription(
             Twist,
-            'turtlebot_cmdVel',
+            'robot_cmdVel',
             self.listener_callback,
             10)
     
@@ -40,11 +38,8 @@ class TurtleBotInterface(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-
-    interface = TurtleBotInterface()
-
+    interface = robot_bot_control()
     rclpy.spin(interface)
-
     interface.destroy_node()
     rclpy.shutdown()
 
