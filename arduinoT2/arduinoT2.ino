@@ -37,22 +37,22 @@ void loop() {
       if (x < 0) {
         digitalWrite(mL1, HIGH);
         digitalWrite(mL2, LOW);
-        digitalWrite(pwmL, 100);
+        digitalWrite(pwmL, 255);
 
         digitalWrite(mR1, HIGH);
         digitalWrite(mR2, LOW);
-        digitalWrite(pwmR, 100);
+        digitalWrite(pwmR, 255);
       }
 
 
       else if (x>0){
         digitalWrite(mL2, HIGH);
         digitalWrite(mL1, LOW);
-        digitalWrite(pwmL, 100);
+        digitalWrite(pwmL, 255);
 
         digitalWrite(mR2, HIGH);
         digitalWrite(mR1, LOW);
-        digitalWrite(pwmR, 100);
+        digitalWrite(pwmR, 255);
       }
 
       else if (y < 0){
@@ -60,11 +60,11 @@ void loop() {
         
         digitalWrite(mL2, HIGH);
         digitalWrite(mL1, LOW);
-        digitalWrite(pwmL, 100);
+        digitalWrite(pwmL, 255);
 
         digitalWrite(mR2, LOW);
         digitalWrite(mR1, HIGH);
-        digitalWrite(pwmR, 70);
+        digitalWrite(pwmR, 255);
         
        }
 
@@ -73,11 +73,11 @@ void loop() {
         
         digitalWrite(mL2, LOW);
         digitalWrite(mL1, HIGH);
-        digitalWrite(pwmL, 100);
+        digitalWrite(pwmL, 255);
 
         digitalWrite(mR2, HIGH);
         digitalWrite(mR1, LOW);
-        digitalWrite(pwmR, 70);
+        digitalWrite(pwmR, 255);
         
        }
 
