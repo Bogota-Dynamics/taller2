@@ -19,21 +19,15 @@ class robot_bot_control(Node):
     
 
     def listener_callback(self, msg):
-
+        
         x = msg.linear.x
         y = msg.angular.y
-
         mensaje = f'{x},{y}'
-
-        self.write_read(mensaje)
-
+        self.arduino.write(bytes(mensaje, 'utf-8'))
+        self.get_logger().info("Mandadndo: " + mensaje)
         
-    def write_read(self, x):
-        print(f'writing {x}')
-        self.arduino.write(bytes(x, 'utf-8'))
-        time.sleep(0.05)
-        data = self.arduino.readline()
-        self.get_logger().info(data)
+
+       
 
 
 def main(args=None):
