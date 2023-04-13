@@ -22,6 +22,8 @@ void setup() {
 
 void loop() {
 
+    Serial.print("HOLAAAAAAAAAA");
+
     String input = Serial.readString();
     input.trim();
     int commaIndex = input.indexOf(',');
@@ -30,8 +32,6 @@ void loop() {
        String str2 = input.substring(commaIndex + 1);
        x = str1.toFloat();
        y = str2.toFloat();
-       Serial.print(x);
-       Serial.print(y);
     }
    
       if (x < 0) {
