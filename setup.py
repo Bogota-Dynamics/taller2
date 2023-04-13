@@ -22,7 +22,7 @@ setup(
         'console_scripts': [
             'talker = taller2.robot_bot_teleop:main',
             'listener = taller2.robot_bot_control:main',
-            'pos = taller2.robot_bot_pos:main'
+            'pos = taller2.robot_bot_position:main'
         ],
     },
 )
