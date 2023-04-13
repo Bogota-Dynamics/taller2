@@ -26,30 +26,24 @@ class PositionPublisher(Node):
         self.previous_time = 0
         self.resolucion = 640
         self.direccion = True
+        self.rpm = 0
 
         GPIO.add_event_detect(self.pin_enc1_a, GPIO.RISING, callback=self.encoder1_callback)
 
 
     def timer_callback(self):        
 
-        vel = self.getVelocidad()
-
-        msg = "Encoder 1 count: {}".format(self.vel)
-
-        self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.data)
-        self.i += 1
-
-
-    def getVelocidad(self):
-
         self.current_time = time.time()
 
         if (self.current_time - self.previous_time > 1000):
             self.previous_time = self.current_time
-            rpm = self.count_enc1*60/self.resolucion
+            self.rpm = self.count_enc1*60/self.resolucion
             self.count_enc1 = 0
-        return rpm
+        
+        msg = "Encoder 1 count: {}".format(self.rpm)
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
 
 
     def encoder1_callback(self, pin):
