@@ -15,7 +15,7 @@ class robot_bot_control(Node):
             10)
     
 
-        self.arduino = serial.Serial(port='/dev/ttyACM0', baudrate=250000,timeout=.1)
+        self.arduino = serial.Serial(port='/dev/ttyACM1', baudrate=250000,timeout=.1)
     
 
     def listener_callback(self, msg):
