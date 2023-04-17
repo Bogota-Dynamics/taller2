@@ -9,7 +9,7 @@ volatile long right_wheel_pulse_count = 0;
 boolean Direction_left = true;
 volatile long left_wheel_pulse_count = 0;
 
-int interval = 1000;
+int interval = 500;
 long previousMillis = 0;
 long currentMillis = 0;
 
@@ -26,6 +26,9 @@ int pwmR = 6;
 int pwmL = 7;
 
 float x, y;
+
+String hola;
+String hola1 = "";
 
 void setup() {
   Serial.begin(250000);
@@ -48,26 +51,7 @@ void setup() {
 }
 
 void loop() {
-    
-    currentMillis = millis();
-    if(currentMillis-previousMillis>interval)
-    {
-      previousMillis = currentMillis;
-      rpm_right= (float)(right_wheel_pulse_count*60/ENC_COUNT_REV);
-      rpm_left= (float)(left_wheel_pulse_count*60/ENC_COUNT_REV);
-      char buffer[20];
-      dtostrf(rpm_right, 5, 2, buffer);
-      String cadena1 = String(buffer);
-      dtostrf(rpm_left, 5, 2, buffer);
-      String cadena2 = String(buffer);
-
-      Serial.println(cadena1 + "," + cadena2);
-
       
-      right_wheel_pulse_count = 0;
-      left_wheel_pulse_count = 0;
-    }
-    
     String input = Serial.readString();
     input.trim();
     int commaIndex = input.indexOf(',');
@@ -89,6 +73,9 @@ void loop() {
 
         Direction_right = true;
         Direction_left = true;
+        rpm_right = 10;
+        rpm_left=10;
+        
       }
       else if (x>0){
         digitalWrite(mL2, HIGH);
@@ -101,6 +88,8 @@ void loop() {
 
         Direction_right = false;
         Direction_left = false;
+        rpm_right = -10;
+        rpm_left=-10;
       }
 
       else if (y < 0){
@@ -113,7 +102,8 @@ void loop() {
         digitalWrite(pwmR, 70);
         Direction_right = true;
         Direction_left = false;
-        
+        rpm_right = 10;
+        rpm_left=-10;
        }
 
        else if (y > 0){
@@ -122,8 +112,12 @@ void loop() {
         digitalWrite(pwmL, 100);
 
         digitalWrite(mR2, HIGH);
+
+
         digitalWrite(mR1, LOW);
         digitalWrite(pwmR, 70);
+        rpm_right = -10;
+        rpm_left=10;
 
         Direction_right = false;
         Direction_left = true;
@@ -134,8 +128,25 @@ void loop() {
 
         digitalWrite(mR1, LOW);
         digitalWrite(mR2, LOW);
+        rpm_right = 0;
+        rpm_left=0;
       }
- 
+
+
+      char buffer[20];
+      dtostrf(rpm_right, 5, 2, buffer);
+      String cadena1 = String(buffer);
+      dtostrf(rpm_left, 5, 2, buffer);
+      String cadena2 = String(buffer);
+
+     hola = cadena1 + "," + cadena2;
+
+     if (hola1 != hola){
+      Serial.println(hola);
+      hola1 = hola;
+      }
+
+      
 }
 
 

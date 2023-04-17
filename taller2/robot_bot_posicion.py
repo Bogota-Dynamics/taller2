@@ -1,5 +1,6 @@
 import rclpy
 import serial
+import serial.tools.list_ports
 from rclpy.node import Node
 from math import pi, cos, sin, atan2
 
@@ -18,43 +19,32 @@ class PositionPublisher(Node):
         self.x = 0
         self.y = 0
         self.theta = 0
-        self.r1_radio=10
-        self.r2_radio=10
-        self.distancia_ruedas=20
-        self.update_freq = 10
+        self.r1_radio=0.05
+        self.r2_radio=0.05
+        self.distancia_ruedas=0.15
+        self.update_freq = timer_period
+        self.vel1 = 0
+        self.vel2 = 0
 
-        self.arduino = serial.Serial(port='/dev/ttyACM0', baudrate=250000,timeout=.1)
+        ports = list(serial.tools.list_ports.comports())
+        arduino_port = ports[0].device
+        self.arduino = serial.Serial(port=arduino_port, baudrate=250000,timeout=.1)
 
     def timer_callback(self):      
         if self.arduino.in_waiting>0:
             line = self.arduino.readline().decode('utf-8')
             self.get_logger().info(line)  
             line = line.split(",")
-            print()
+            self.vel1 = float(line[0])
+            self.vel2 = float(line[1])
 
-            if (float(line[0])>0):
-                vel1 = 10
-            elif (float(line[0])<0):
-                vel1 =-10
-            else:
-                vel1 = 0
-            
-            if (float(line[1])>0):
-                vel2 = 10
-            elif (float(line[1])<0):
-                vel2 = -10 
-            else:
-                vel2 =0
+        self.odometria(self.vel1,self.vel2)
 
-
-
-            self.odometria(vel1, vel2)
-
-            #Publlicar las posiciones
-            msg = Twist()
-            msg.linear.x = float(self.x)/10000
-            msg.linear.y = float(self.y)/10000
-            self.publisher_.publish(msg)
+        #Publlicar las posiciones
+        msg = Twist()
+        msg.linear.x = float(self.x)
+        msg.linear.y = float(self.y)
+        self.publisher_.publish(msg)
 
     def odometria(self, w1, w2):
         # ODOMETRIA
@@ -65,10 +55,10 @@ class PositionPublisher(Node):
         w = (v2 - v1)/self.distancia_ruedas # Velocidad angular (rad/s)
 
         dt = self.update_freq # Tiempo de actualizacion (s)
-        self.x += v * cos(self.theta) * dt # Distancia recorrida en x (en m)
-        self.y += v * sin(self.theta) * dt # Distancia recorrida en y (en m)
         self.theta += w * dt # Angulo recorrido (en rad)
         self.theta = atan2(sin(self.theta), cos(self.theta)) # Normalización del angulo
+        self.y += v * cos(self.theta) * dt # Distancia recorrida en x (en m)
+        self.x += v * sin(self.theta) * dt # Distancia recorrida en y (en m)
 
 
 def main(args=None):

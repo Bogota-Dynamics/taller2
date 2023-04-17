@@ -1,5 +1,6 @@
 import rclpy
 import serial
+import serial.tools.list_ports
 import time
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
@@ -15,7 +16,11 @@ class robot_bot_control(Node):
             10)
     
 
-        self.arduino = serial.Serial(port='/dev/ttyACM0', baudrate=250000,timeout=.1)
+        #Encontrar puerto Automaticamente
+        ports = list(serial.tools.list_ports.comports())
+        arduino_port = ports[0].device
+
+        self.arduino = serial.Serial(port=arduino_port, baudrate=250000,timeout=.1)
     
 
     def listener_callback(self, msg):
