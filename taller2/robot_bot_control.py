@@ -21,9 +21,9 @@ class robot_bot_control(Node):
     def listener_callback(self, msg):
 
         x = msg.linear.x
-        y = msg.angular.y
+        z = msg.angular.z
 
-        mensaje = f'{x},{y}'
+        mensaje = f'{x},{z}'
 
         self.write_read(mensaje)
 
