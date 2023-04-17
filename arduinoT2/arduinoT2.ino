@@ -19,7 +19,7 @@ float rpm_left = 0;
 float rpm_left_ant = 0;
 
 int mR1 = 2;
-int mR2 = 3;
+int mR2 = 3; 
 int mL1 = 4;
 int mL2 = 5;
 int pwmR = 6;
@@ -86,6 +86,9 @@ void loop() {
         digitalWrite(mR1, HIGH);
         digitalWrite(mR2, LOW);
         digitalWrite(pwmR, 100);
+
+        Direction_right = true;
+        Direction_left = true;
       }
       else if (x>0){
         digitalWrite(mL2, HIGH);
@@ -95,6 +98,9 @@ void loop() {
         digitalWrite(mR2, HIGH);
         digitalWrite(mR1, LOW);
         digitalWrite(pwmR, 100);
+
+        Direction_right = false;
+        Direction_left = false;
       }
 
       else if (y < 0){
@@ -105,6 +111,8 @@ void loop() {
         digitalWrite(mR2, LOW);
         digitalWrite(mR1, HIGH);
         digitalWrite(pwmR, 70);
+        Direction_right = true;
+        Direction_left = false;
         
        }
 
@@ -116,6 +124,9 @@ void loop() {
         digitalWrite(mR2, HIGH);
         digitalWrite(mR1, LOW);
         digitalWrite(pwmR, 70);
+
+        Direction_right = false;
+        Direction_left = true;
        }
       else if (x==0 || y==0){
         digitalWrite(mL1, LOW);
@@ -129,20 +140,8 @@ void loop() {
 
 
 void right_wheel_pulse(){
-  
-  int val=digitalRead(ENC_IN_RIGHT_B);
-  
-  if(val == LOW){
-
-    Direction_right = false;
-    }
-
-  else{
-    Direction_right = true;
-    }
-
-  if(val == LOW){
-
+ 
+  if(Direction_right == false){
     right_wheel_pulse_count++;
     }
 
@@ -154,24 +153,15 @@ void right_wheel_pulse(){
 
 
 void left_wheel_pulse(){
+
   
-  int val=digitalRead(ENC_IN_LEFT_B);
-  
-  if(val == LOW){
-
-    Direction_left = false;
-    }
-
-  else{
-    Direction_left = true;
-    }
-
-  if(val == LOW){
-
+  if(Direction_left == false){
     left_wheel_pulse_count++;
     }
 
   else{
     left_wheel_pulse_count--;
     }
+
+    
 }
