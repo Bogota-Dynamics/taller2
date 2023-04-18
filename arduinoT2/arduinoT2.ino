@@ -73,8 +73,8 @@ void loop() {
 
         Direction_right = true;
         Direction_left = true;
-        rpm_right = 10;
-        rpm_left=10;
+        rpm_right = -10;
+        rpm_left=-10;
         
       }
       else if (x>0){
@@ -88,8 +88,8 @@ void loop() {
 
         Direction_right = false;
         Direction_left = false;
-        rpm_right = -10;
-        rpm_left=-10;
+        rpm_right = 10;
+        rpm_left=10;
       }
 
       else if (y < 0){

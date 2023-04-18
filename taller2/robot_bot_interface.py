@@ -153,7 +153,7 @@ def save_motion_thread(interface:TurtleBotInterface):
 
 
 def recreate_motion_thread(interface:TurtleBotInterface):
-    while not interface.client.wait_for_service(timeout_sec=1.0):
+    while not interface.client2.wait_for_service(timeout_sec=1.0):
         interface.get_logger().info('service not available, waiting again...')
 
     request = SaveMotions.Request()

@@ -22,7 +22,7 @@ class TurtleBotPlayer(Node):
     def recreate_motion_callback(self, request, response):
 
         # leer el archivo y publicar los movimientos
-        filename = 'src/taller1/motion/' + request.filename + '.txt'
+        filename = 'src/taller2/motion/' + request.filename + '.txt'
         response.path = abspath(filename)
         self.get_logger().info('Reading from file: ' + response.path)
         msg = Twist()
@@ -46,28 +46,30 @@ class TurtleBotPlayer(Node):
             for line in f:
                 start = time.time()
                 line = line.strip()
+                print(line)
                 msg = Twist()
-                if line[0] == 'TriggerR':
+                if line == 'TriggerR':
                     msg.linear.x = linear
                     self.get_logger().info('Publishing: Adelante')
-                elif line[0] == 'TriggerL':
+                elif line == 'TriggerL':
                     msg.linear.x = -linear
                     self.get_logger().info('Publishing: Atras')
-                elif line[0] == 'Izquierda':
+                elif line == 'Izquierda':
                     msg.angular.z = angular
                     self.get_logger().info('Publishing: Izquierda')
-                elif line[0] == 'Derecha':
+                elif line == 'Derecha':
                     msg.angular.y = -angular
                     self.get_logger().info('Publishing: Derecha')
-                elif line[0] == 'QUIETO':
+                elif line == 'QUIETO':
                     msg.linear.x=0.0
                     msg.angular.z=0.0
 
                 # Los mensajes se publican cada 0.04 segundos aproximadamente
                 while (time.time() - start) < 0.04: pass
                 if (msg_viejo != msg):
+                    print("AAAAAAAAAAAAAAA")
                     self.publisher_.publish(msg)
-                msg_viejo = msg
+                    msg_viejo = msg
 
         msg = Twist()
         msg.linear.x=0.0

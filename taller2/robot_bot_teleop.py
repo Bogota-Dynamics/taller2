@@ -34,7 +34,7 @@ class robot_bot_teleop(Node):
         self.service = self.create_service(SaveMotions, 'save_motion', self.save_motion_callback)
 
     def save_motion_callback(self, request, response):
-        filename = 'src/taller1/motion/' + request.filename + '.txt'
+        filename = 'src/taller2/motion/' + request.filename + '.txt'
         response.path = abspath(filename)
         self.get_logger().info('Writing to file: ' + response.path)
 

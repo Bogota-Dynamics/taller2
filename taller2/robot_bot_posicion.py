@@ -18,7 +18,7 @@ class PositionPublisher(Node):
 
         self.x = 0
         self.y = 0
-        self.theta = 0
+        self.theta = pi/2
         self.r1_radio=0.05
         self.r2_radio=0.05
         self.distancia_ruedas=0.15
@@ -44,9 +44,11 @@ class PositionPublisher(Node):
         msg = Twist()
         msg.linear.x = float(self.x)
         msg.linear.y = float(self.y)
+        print(msg)
         self.publisher_.publish(msg)
 
     def odometria(self, w1, w2):
+        """
         # ODOMETRIA
         v1 = w1 * self.r1_radio
         v2 = w2 * self.r2_radio
@@ -55,10 +57,23 @@ class PositionPublisher(Node):
         w = (v2 - v1)/self.distancia_ruedas # Velocidad angular (rad/s)
 
         dt = self.update_freq # Tiempo de actualizacion (s)
-        self.theta += w * dt # Angulo recorrido (en rad)
-        self.theta = atan2(sin(self.theta), cos(self.theta)) # Normalización del angulo
         self.y += v * cos(self.theta) * dt # Distancia recorrida en x (en m)
         self.x += v * sin(self.theta) * dt # Distancia recorrida en y (en m)
+        self.theta += w * dt # Angulo recorrido (en rad)
+        self.theta = atan2(sin(self.theta), cos(self.theta)) # Normalización del angulo
+        """
+        if w1 != 0 and w2 != 0:
+            dt = self.update_freq
+            theta1 = w1 * dt
+            theta2 = w2 * dt
+            d1 = self.r1_radio * theta1
+            d2 = self.r2_radio * theta2
+            d = (d1 + d2) / 2
+            delta_theta = (theta2 - theta1) / d
+            self.x = self.x + d * cos(self.theta + delta_theta / 2)
+            self.y = self.y + d * sin(self.theta + delta_theta / 2)
+            self.theta = self.theta + delta_theta
+
 
 
 def main(args=None):
