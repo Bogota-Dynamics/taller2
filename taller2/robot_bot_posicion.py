@@ -47,8 +47,8 @@ class PositionPublisher(Node):
         print(msg)
         self.publisher_.publish(msg)
 
-    def odometria(self, w1, w2):
-        """
+    def odometria(self, w2, w1):
+
         # ODOMETRIA
         v1 = w1 * self.r1_radio
         v2 = w2 * self.r2_radio
@@ -73,7 +73,7 @@ class PositionPublisher(Node):
             self.x = self.x + d * cos(self.theta + delta_theta / 2)
             self.y = self.y + d * sin(self.theta + delta_theta / 2)
             self.theta = self.theta + delta_theta
-
+        """
 
 
 def main(args=None):
