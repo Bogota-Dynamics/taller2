@@ -61,19 +61,6 @@ class PositionPublisher(Node):
         self.x += v * sin(self.theta) * dt # Distancia recorrida en y (en m)
         self.theta += w * dt # Angulo recorrido (en rad)
         self.theta = atan2(sin(self.theta), cos(self.theta)) # Normalización del angulo
-        """
-        if w1 != 0 and w2 != 0:
-            dt = self.update_freq
-            theta1 = w1 * dt
-            theta2 = w2 * dt
-            d1 = self.r1_radio * theta1
-            d2 = self.r2_radio * theta2
-            d = (d1 + d2) / 2
-            delta_theta = (theta2 - theta1) / d
-            self.x = self.x + d * cos(self.theta + delta_theta / 2)
-            self.y = self.y + d * sin(self.theta + delta_theta / 2)
-            self.theta = self.theta + delta_theta
-        """
 
 
 def main(args=None):
