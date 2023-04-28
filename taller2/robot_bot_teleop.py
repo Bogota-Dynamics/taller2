@@ -2,6 +2,8 @@ import rclpy
 import pygame
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
+from my_msgs.srv import SaveMotions
+from os.path import abspath
 
 
 class robot_bot_teleop(Node):
@@ -13,6 +15,7 @@ class robot_bot_teleop(Node):
         self.joystick.init()
         self.timer = self.create_timer(0.1, self.timer_callback)
 
+        #Encontrar el control para input
         joystick_count = pygame.joystick.get_count()
         if joystick_count == 0:
             print("No se detectaron dispositivos de joystick.")
@@ -21,14 +24,23 @@ class robot_bot_teleop(Node):
         else:
             print("Hay" + str(joystick_count))
 
-        #listener = keyboard.Listener(on_press=self.on_presss, on_release=self.on_release)
-        #listener.start()
-
+        #Inicializar variablese para publicar controles
         self.linear = float(input("Ingrese la velocidad lineal: "))
         self.angular = float(input("Ingrese la velocidad angular: "))
-        self.prevchar = ''
-
         self.msg_viejo = 0
+
+        # crear un servicio que guarde la lista de movimientos en un archivo txt
+        self.motion = f'{self.linear},{self.angular}\n' # lista de movimientos
+        self.service = self.create_service(SaveMotions, 'save_motion', self.save_motion_callback)
+
+    def save_motion_callback(self, request, response):
+        filename = 'src/taller2/motion/' + request.filename + '.txt'
+        response.path = abspath(filename)
+        self.get_logger().info('Writing to file: ' + response.path)
+
+        with open(response.path, 'w') as f:
+            f.write(self.motion)
+        return response
 
     def timer_callback(self):
         for event in pygame.event.get(): 
@@ -37,33 +49,33 @@ class robot_bot_teleop(Node):
                 quit()
         
         x_axis_left = self.joystick.get_axis(0)
-        y_axis_right = self.joystick.get_axis(3)
         triggerR = self.joystick.get_axis(4)
         triggerL = self.joystick.get_axis(5)
 
         minVal = 0.1 # si el valor leído es menor a 0.1, no lo lee
 
-        mov = []
+        mov = 'QUIETO'
         if (abs(x_axis_left) > minVal):
-            mov.append("Izquierda" if x_axis_left < 0 else "Derecha")
-        if (abs(y_axis_right) > minVal):
-            mov.append("Abajo" if y_axis_right > 0 else "Arriba")
+            mov = ("Izquierda" if x_axis_left < 0 else "Derecha")
         if (triggerL > -1):
-            mov.append("TriggerL")
+            mov = ("TriggerL")
         if (triggerR > -1):
-            mov.append("TriggerR")
+            mov = ("TriggerR")
 
         msg = Twist()
-        if 'TriggerR' in mov:
+        if 'TriggerR' == mov:
             msg.linear.x = self.linear
-        elif 'TriggerL' in mov:
+        elif 'TriggerL' == mov:
             msg.linear.x = -self.linear
-        elif 'Izquierda' in mov:
-            msg.angular.y = self.angular
-        elif 'Derecha' in mov:  
-            msg.angular.y = -self.angular
+        elif 'Izquierda' == mov:
+            msg.angular.z = self.angular
+        elif 'Derecha' == mov:  
+            msg.angular.z = -self.angular
         else:
             msg.linear.x = 0.0
+
+        self.motion += mov + '\n' # w = adelante, s = atras, a = izquierda, d = derecha
+
 
         print(msg)
         if (self.msg_viejo!=msg): 
@@ -73,12 +85,9 @@ class robot_bot_teleop(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    
     pygame.init()
     teleop = robot_bot_teleop()
-
     rclpy.spin(teleop)
-
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)

@@ -21,7 +21,10 @@ setup(
     entry_points={
         'console_scripts': [
             'talker = taller2.robot_bot_teleop:main',
-            'listener = taller2.robot_bot_control:main'
+            'listener = taller2.robot_bot_control:main',
+            'pos = taller2.robot_bot_posicion:main',
+            'inter = taller2.robot_bot_interface:main',
+            'play = taller2.robot_bot_player:main'
         ],
     },
 )
